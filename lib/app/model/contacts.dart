@@ -2,11 +2,7 @@ import 'package:addressbook/app/model/contact.dart';
 import 'package:flutter/cupertino.dart';
 
 class Contacts extends ValueNotifier<List<Contact>> {
-  Contacts._shareInstance()
-      : super([
-          Contact("Fabio"),
-          Contact("Daniel"),
-        ]);
+  Contacts._shareInstance() : super([]);
   static final Contacts _share = Contacts._shareInstance();
   factory Contacts() => _share;
 
