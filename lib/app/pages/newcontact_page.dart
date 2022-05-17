@@ -1,3 +1,4 @@
+import 'package:addressbook/app/bloc/bloc_bloc.dart';
 import 'package:addressbook/app/model/contact.dart';
 import 'package:addressbook/app/model/contacts.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _NewContactPageState extends State<NewContactPage> {
             ElevatedButton(
               onPressed: () {
                 Contact contact = Contact(controller.text);
-                context.read<Contacts>().add(contact);
+                context.read<BlocBloc>().add(AddContactEvent(contact));
                 Navigator.of(context).pop();
               },
               child: const Text("Confirm"),

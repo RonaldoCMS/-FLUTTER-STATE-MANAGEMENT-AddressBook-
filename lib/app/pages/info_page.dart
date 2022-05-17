@@ -1,3 +1,4 @@
+import 'package:addressbook/app/bloc/bloc_bloc.dart';
 import 'package:addressbook/app/model/contact.dart';
 import 'package:addressbook/app/model/contacts.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,19 +33,23 @@ class _InfoPageState extends State<InfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: TextField(
-          controller: controller,
-          onChanged: (value) {
-            Contact cont = context
-                .read<Contacts>()
-                .contacts
-                .firstWhere((element) => element.id == widget.contact.id);
-            context.read<Contacts>().remove(cont);
-            context.read<Contacts>().add(Contact(value, id: cont.id));
-            
-          },
-        ),
+      body: Column(
+        children: [
+          Center(
+            child: TextField(
+              controller: controller,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              String id = widget.contact.id;
+              String name = controller.text;
+              context.read<BlocBloc>().add(ModContactEvent(id, name));
+              Navigator.of(context).pop();
+            },
+            child: Text("Confirm"),
+          )
+        ],
       ),
     );
   }

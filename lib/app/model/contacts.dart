@@ -4,7 +4,7 @@ import 'dart:collection';
 import 'package:addressbook/app/model/contact.dart';
 import 'package:flutter/cupertino.dart';
 
-class Contacts extends ChangeNotifier {
+class Contacts {
   final List<Contact> contacts = [Contact("Peppe")];
 
   void add(Contact contact) {
@@ -12,11 +12,13 @@ class Contacts extends ChangeNotifier {
     contacts.sort((v1, v2) {
       return v1.name.length.compareTo(v2.name.length);
     });
-    notifyListeners();
   }
 
   void remove(Contact contact) {
     contacts.remove(contact);
-    notifyListeners();
+  }
+
+  void mod(String id, String name) {
+    contacts.firstWhere((element) => id == element.id).name = name;
   }
 }

@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 
 class Contact {
   late final String id;
-  late final String name;
+  late String name;
   Contact(this.name, {String? id}) {
     this.id = id ?? const Uuid().v4();
   }

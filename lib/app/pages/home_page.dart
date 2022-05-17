@@ -1,10 +1,12 @@
 import 'dart:collection';
 
+import 'package:addressbook/app/bloc/bloc_bloc.dart';
 import 'package:addressbook/app/model/contact.dart';
 import 'package:addressbook/app/model/contacts.dart';
 import 'package:addressbook/app/pages/info_page.dart';
 import 'package:addressbook/app/widget/contact_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,26 +24,27 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Consumer<Contacts>(
-        builder: (context, value, child) => ListView.builder(
-          itemCount: value.contacts.length,
+      body: BlocBuilder<BlocBloc, BlocState>(
+        builder: (context, state) => ListView.builder(
+          itemCount: state.bookContacts.contacts.length,
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => InfoPage(
-                    contact: value.contacts[index],
+                    contact: state.bookContacts.contacts[index],
                   ),
                 ),
               ),
               child: Dismissible(
-                key: ValueKey(value.contacts[index].id),
+                key: ValueKey(state.bookContacts.contacts[index].id),
                 onDismissed: (DismissDirection dismissDirection) {
-                  value.remove(value.contacts[index]);
+                  context.read<BlocBloc>().add(
+                      DeleteContactEvent(state.bookContacts.contacts[index]));
                 },
                 child: ListTile(
-                  title: Text(value.contacts[index].name),
+                  title: Text(state.bookContacts.contacts[index].name),
                 ),
               ),
             );
