@@ -1,6 +1,11 @@
+import 'dart:collection';
+
 import 'package:addressbook/app/model/contact.dart';
 import 'package:addressbook/app/model/contacts.dart';
+import 'package:addressbook/app/pages/info_page.dart';
+import 'package:addressbook/app/widget/contact_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -11,34 +16,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Contacts contactBook = Contacts();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: ValueListenableBuilder(
-            valueListenable: Contacts(),
-            builder: (context, List<Contact> value, child) {
-              final contacts = value;
-              return ListView.builder(
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
-                  Contact contact = contacts[index];
-                  return Dismissible(
-                    key: ValueKey(contact.id),
-                    onDismissed: (DismissDirection dismissDirection) {
-                      contactBook.removeByContact(contact);
-                    },
-                    child: ListTile(
-                      title: Text(contact.name),
-                    ),
-                  );
+      body: Consumer<Contacts>(
+        builder: (context, value, child) => ListView.builder(
+          itemCount: value.contacts.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InfoPage(
+                    contact: value.contacts[index],
+                  ),
+                ),
+              ),
+              child: Dismissible(
+                key: ValueKey(value.contacts[index].id),
+                onDismissed: (DismissDirection dismissDirection) {
+                  value.remove(value.contacts[index]);
                 },
-              );
-            }),
+                child: ListTile(
+                  title: Text(value.contacts[index].name),
+                ),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/new-contact'),

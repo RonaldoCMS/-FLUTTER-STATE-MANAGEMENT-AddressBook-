@@ -1,31 +1,22 @@
+import 'dart:async';
+import 'dart:collection';
+
 import 'package:addressbook/app/model/contact.dart';
 import 'package:flutter/cupertino.dart';
 
-class Contacts extends ValueNotifier<List<Contact>> {
-  Contacts._shareInstance() : super([]);
-  static final Contacts _share = Contacts._shareInstance();
-  factory Contacts() => _share;
+class Contacts extends ChangeNotifier {
+  final List<Contact> contacts = [Contact("Peppe")];
 
-  int get length => value.length;
-
-  Contact? getContact(int atIndex) =>
-      (atIndex > length) ? null : value[atIndex];
-
-  void addContact(Contact contact) {
-    value.add(contact);
+  void add(Contact contact) {
+    contacts.add(contact);
+    contacts.sort((v1, v2) {
+      return v1.name.length.compareTo(v2.name.length);
+    });
     notifyListeners();
   }
 
-  void remove(int index) {
-    value.removeAt(index);
+  void remove(Contact contact) {
+    contacts.remove(contact);
     notifyListeners();
-  }
-
-  void removeByContact(Contact contact) {
-    final contacts = value;
-    if (contacts.contains(contact)) {
-      contacts.remove(contact);
-      notifyListeners();
-    }
   }
 }

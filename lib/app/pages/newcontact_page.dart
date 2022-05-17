@@ -1,6 +1,7 @@
 import 'package:addressbook/app/model/contact.dart';
 import 'package:addressbook/app/model/contacts.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NewContactPage extends StatefulWidget {
   const NewContactPage({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class _NewContactPageState extends State<NewContactPage> {
             ElevatedButton(
               onPressed: () {
                 Contact contact = Contact(controller.text);
-                Contacts().addContact(contact);
+                context.read<Contacts>().add(contact);
                 Navigator.of(context).pop();
               },
               child: const Text("Confirm"),
